@@ -39,7 +39,7 @@ subject_id = surveyInfo['id']
 win = visual.Window(size =[800, 600], fullscr = False)
 
 file_name = "BFAS-Self_Survey" + str(subject_id) + ".csv"
-BFAS-Self_Survey_Data = pd.read_csv('BFAS-Self_Survey.csv') 
+BFAS_Self_Survey_Data = pd.read_csv('BFAS_Self_Survey.csv') 
 
 win.flip()
 message = visual.TextStim(win, text = 'press spacebar to begin')
@@ -49,7 +49,7 @@ event.waitKeys(keyList='space')
 message.setText('')
 win.flip()
 
-instruct = 'Here are a number of characteristics that may or may not describe you. For example, do you agree that you seldom feel blue, compared to most other people? Please fill in the number that best indicates the extent to which you agree or disagree with each statement listed below. Be as honest as possible, but rely on your initial feeling and do not think too much about each item."
+instruct = 'Here are a number of characteristics that may or may not describe you. \nFor example, do you agree that you seldom feel blue, compared to most other people? \nPlease fill in the number that best indicates the extent to which you agree or disagree with each statement listed below.\nBe as honest as possible, but rely on your initial feeling and do not think too much about each item.'
 
 instructions = visual.TextStim(win, text = instruct, 
                                units = 'norm')
@@ -70,7 +70,7 @@ sp_text.draw()
 win.flip()
 event.waitKeys(keyList = 'space')
 # takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
-nTrials = BFAS-Self_Survey_Data.shape[0] #returns the amount of rows in my data frame 
+nTrials = BFAS_Self_Survey_Data.shape[0] #returns the amount of rows in my data frame 
 
 #set up empty arrays of variables
 ids = []
