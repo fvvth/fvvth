@@ -80,6 +80,7 @@ responses = []
 aggregate = []
 
 #start the trial loop
+# Not edited this to fit for this data set 
 for n in range(0, nTrials):
     question = RandVignett.loc[n, 'questionText']
     vinNum = RandVignett.loc[n, 'VinNum']
