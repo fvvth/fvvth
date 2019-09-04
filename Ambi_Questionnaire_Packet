@@ -38,8 +38,8 @@ surveyInfo['surveyName'] = surveyName
 subject_id = surveyInfo['id']
 win = visual.Window(size =[800, 600], fullscr = False)
 
-file_name = "BFAS-Self_Survey" + str(subject_id) + ".csv"
-BFAS_Self_Survey_Data = pd.read_csv('BFAS-Self_Survey.csv') 
+file_name = "BFAS_Self_Survey" + str(subject_id) + ".csv"
+BFAS_Self_Survey_Data = pd.read_csv('BFAS_Self_Survey.csv') 
 
 win.flip()
 message = visual.TextStim(win, text = 'press spacebar to begin')
@@ -70,7 +70,7 @@ sp_text.draw()
 win.flip()
 event.waitKeys(keyList = 'space')
 # takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
-nTrials = BFAS-Self_Survey_Data.shape[0] #returns the amount of rows in my data frame 
+nTrials = BFAS_Self_Survey_Data.shape[0] #returns the amount of rows in my data frame 
 
 #set up empty arrays of variables
 ids = []
