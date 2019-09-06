@@ -39,7 +39,7 @@ subject_id = surveyInfo['id']
 win = visual.Window(size =[800, 600], fullscr = False)
 
 file_name = "BFAS_Self_Survey" + str(subject_id) + ".csv"
-BFAS_Self_Survey_Data = pd.read_csv('BFAS_Self_Survey.csv') 
+BFAS_Self_Survey = pd.read_csv('BFAS_Self_Survey.csv') 
 
 win.flip()
 message = visual.TextStim(win, text = 'press spacebar to begin')
@@ -49,7 +49,7 @@ event.waitKeys(keyList='space')
 message.setText('')
 win.flip()
 
-instruct = 'Here are a number of characteristics that may or may not describe you. For example, do you agree that you seldom feel blue, compared to most other people? Please fill in the number that best indicates the extent to which you agree or disagree with each statement listed below. Be as honest as possible, but rely on your initial feeling and do not think too much about each item."
+instruct = "Here are a number of characteristics that may or may not describe you./nFor example, do you agree that you seldom feel blue, compared to most other people? /nPlease fill in the number that best indicates the extent to which you agree or disagree with each statement listed below. /nBe as honest as possible, but rely on your initial feeling and do not think too much about each item."
 
 instructions = visual.TextStim(win, text = instruct, 
                                units = 'norm')
@@ -70,22 +70,66 @@ sp_text.draw()
 win.flip()
 event.waitKeys(keyList = 'space')
 # takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
-nTrials = BFAS_Self_Survey_Data.shape[0] #returns the amount of rows in my data frame 
+nTrials = BFAS_Self_Survey.shape[0] #returns the amount of rows in my data frame 
 
 #set up empty arrays of variables
 ids = []
-characteristics = []
-characteristicsNums = []
-responses = []
-aggregate = []
+bfasChar = []
+bfasCharNum = []
+bfasResponses = []
+bfasResponseTime = []
+bfasAggregate = []
 
 #start the trial loop
-# Not edited this to fit for this data set 
 for n in range(0, nTrials):
-    question = RandVignett.loc[n, 'questionText']
-    vinNum = RandVignett.loc[n, 'VinNum']
-    vinType = RandVignett.loc[n, 'VinType']
+     question = BFAS_Self_Survey.loc[n, 'Characteristic']
+     charNum = BFAS_Self_Survey.loc[n, 'CharNum']
+     response = BFAS_Self_Survey.loc[n, 'Response']
+     responseTime = BFAS_Self_Survey.loc[n, 'Response_Time']
+     aggregateScore = BFAS_Self_Survey.loc[n, 'Aggregate_Score']
+     
+     s1 = visual.TextStim(win, text= 'Strongly Disagree', height=.04, units='norm', pos =(-0.5, -0.45))
+     s2 = visual.TextStim(win, text= 'Slightly Disagree', height=.04, units='norm', pos = (-0.2, -0.45))
+     s3 = visual.TextStim(win, text= 'Neither Agree/nNorDisagree', height=.04, units='norm', pos = (0.2, -0.45))
+     s4 = visual.TextStim(win, text= 'Slightly Agree', height=.04, units='norm', pos = (0.5, -0.45))
+     s5 = visual.TextStim(win, text= 'Strongly Agree', height=.04, units='norm', pos = (0.5, -0.45))
+     
+     q_scale = visual.RatingScale(win, low = 1, high = 5, neutral = 3, scale = False, labels = False, singleClick = True)
+     
+     q = visual.TextStim(win, text=question, height=.10, units='norm')
+     
+     while q_scale.noResponse: # show & update until a response has been made
+        q.draw()
+        s1.draw()
+        s2.draw()
+        s3.draw()
+        s4.draw()
+        s5.draw()
+        q_scale.draw()
+        win.flip()
+        
+     bfasResponse = q_scale.getRating()
+     bfasResponseTime = q_scale.getRT()
+        
+     ids.append(subject_id)
+     bfasChar.append(question)
+     bfasCharNum.append(charNum) 
+     bfasResponses.append(response)
+     bfasResponseTime.append(responseTime)
+     bfasAggregate.append(aggregateScore)
+     
+     win.flip() 
+     
+#create data frame with responses and associated characteristic\
+bfasData = pd.DataFrame({'id' : ids,
+                     'charNum' : bfasCharNum,
+                     'characteristic' : bfasChar,
+                     'response' : bfasResponses, 
+                     'responseTime':bfasResponseTime, 
+                     'aggregate' : bfasAggregate})
+    
+#Take the data frame and turn it into a csv file
+bfasData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
 
-
-
-
+win.close()
+core.quit()
