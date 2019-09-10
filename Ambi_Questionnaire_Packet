@@ -272,7 +272,7 @@ promisResponseTimes = []
 
 #start the trial loop
 for n in range(0, 5):
-     items = Promis_Depression.loc[n, 'items']
+     question = Promis_Depression.loc[n, 'items']
      itemNum = Promis_Depression.loc[n, 'itemNum']
     
      s1 = visual.TextStim(win, text= 'Never', height=.04, units='norm', pos =(-0.55, -0.45))
@@ -299,7 +299,7 @@ for n in range(0, 5):
      promisResponseTime = q_scale.getRT()
      
      ids.append(subject_id)
-     promisItems.append(items)
+     promisItems.append(question)
      promisItemNum.append(itemNum) 
      promisResponses.append(promisResponse)
      promisResponseTimes.append(promisResponseTime)
@@ -309,7 +309,7 @@ for n in range(0, 5):
 #create data frame with responses and associated characteristic\
 promisData = pd.DataFrame({'id' : ids,
                      'itemNum' : promisItemNum,
-                     'items' : promisItems,
+                     'question' : promisItems,
                      'response' : promisResponses, 
                      'responseTime': promisResponseTimes})
     
@@ -317,15 +317,6 @@ promisData = pd.DataFrame({'id' : ids,
 promisData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
 
 win.flip()
-
-
-
-
-
-
-
-
-
 
 #end of PROMIS survey, now launching Rosenberg
 
@@ -375,7 +366,7 @@ rosenbergResponseTimes = []
 
 #start the trial loop
 for n in range(0, 5):
-     statements = Rosenberg_Self_Esteem.loc[n, 'statements']
+     question = Rosenberg_Self_Esteem.loc[n, 'statements']
      stateNum = Rosenberg_Self_Esteem.loc[n, 'stateNum']
     
      s1 = visual.TextStim(win, text= 'Strongly\nAgree', height=.04, units='norm', pos =(-0.55, -0.45))
@@ -400,7 +391,7 @@ for n in range(0, 5):
      rosenbergResponseTime = q_scale.getRT()
      
      ids.append(subject_id)
-     rosenbergState.append(statements)
+     rosenbergState.append(question)
      rosenbergStateNum.append(stateNum) 
      rosenbergResponses.append(rosenbergResponse)
      rosenbergResponseTimes.append(rosenbergResponseTime)
@@ -420,6 +411,7 @@ rosenbergData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header 
 win.flip()
 
 #end of Rosenberg survey, now launching SAD_D
+
 file_name = "SAD_D" + str(subject_id) + ".csv"
 SAD_D = pd.read_csv('SAD_D.csv') 
 
@@ -431,7 +423,7 @@ event.waitKeys(keyList='space')
 message.setText('')
 win.flip()
 
-instruct = "The following questions ask about thoughts, feelings, and behaviors that you may have had about social situations.\nUsual social situations include: public speaking, speaking in meetings, attending social events or parties, introducing yourself to others, having conversations, giving and receiving compliments, making requests of others, and eating and writing in public.\nPlease rate how often the following statements are true for you:"
+instruct = "The following questions ask about thoughts, feelings, and behaviors that you may have had about social situations.\nUsual social situations include: public speaking, speaking in meetings, attending social events or parties, introducing yourself to others, having conversations, giving and receiving compliments, making requests of others, and eating and writing in public.\nPlease rate how often the following statements are true for you."
 
 instructions = visual.TextStim(win, text = instruct, 
                         height = .07, units = 'norm',
@@ -466,7 +458,7 @@ sadResponseTimes = []
 
 #start the trial loop
 for n in range(0, 5):
-     questions = SAD_D.loc[n, 'questions']
+     question = SAD_D.loc[n, 'questions']
      questNum = SAD_D.loc[n, 'questNum']
     
      s1 = visual.TextStim(win, text= 'Never', height=.04, units='norm', pos =(-0.55, -0.45))
@@ -493,10 +485,10 @@ for n in range(0, 5):
      sadResponseTime = q_scale.getRT()
      
      ids.append(subject_id)
-     sadQuest.append(sadQuest)
-     sadQuestNum.append (sadQuestNum) 
-     sadResponses.append(sadResponses)
-     sadResponseTimes.append(sadResponseTimes) 
+     sadQuest.append(question)
+     sadQuestNum.append(questNum) 
+     sadResponses.append(sadResponse)
+     sadResponseTimes.append(sadResponseTime) 
      
      win.flip() 
      
@@ -510,5 +502,4 @@ sadData = pd.DataFrame({'id' : ids,
 #Take the data frame and turn it into a csv file
 sadData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
 
-win.flip()
-core.quit() 
+win.close()
