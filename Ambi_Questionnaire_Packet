@@ -83,7 +83,7 @@ bfasResponses = []
 bfasResponseTimes = []
 
 #start the trial loop
-for n in range(0, 5):
+for n in range(0, 1):
      question = BFAS_Self_Survey.loc[n, 'characteristic']
      charNum = BFAS_Self_Survey.loc[n, 'charNum']
     
@@ -179,7 +179,7 @@ eqShortResponses = []
 eqShortResponseTimes = []
 
 #start the trial loop
-for n in range(0, 5):
+for n in range(0, 1):
      question = EQ_Short.loc[n, 'question']
      questNum = EQ_Short.loc[n, 'questNum']
     
@@ -271,7 +271,7 @@ promisResponses = []
 promisResponseTimes = []
 
 #start the trial loop
-for n in range(0, 5):
+for n in range(0, 1):
      question = Promis_Depression.loc[n, 'items']
      itemNum = Promis_Depression.loc[n, 'itemNum']
     
@@ -365,7 +365,7 @@ rosenbergResponses = []
 rosenbergResponseTimes = []
 
 #start the trial loop
-for n in range(0, 5):
+for n in range(0, 1):
      question = Rosenberg_Self_Esteem.loc[n, 'statements']
      stateNum = Rosenberg_Self_Esteem.loc[n, 'stateNum']
     
@@ -457,7 +457,7 @@ sadResponses = []
 sadResponseTimes = []
 
 #start the trial loop
-for n in range(0, 5):
+for n in range(0, 1):
      question = SAD_D.loc[n, 'questions']
      questNum = SAD_D.loc[n, 'questNum']
     
@@ -501,5 +501,281 @@ sadData = pd.DataFrame({'id' : ids,
     
 #Take the data frame and turn it into a csv file
 sadData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
+
+win.flip()
+
+#end of SAD_D survey, now launching SAIS
+
+file_name = "SAIS" + str(subject_id) + ".csv"
+SAIS = pd.read_csv('SAIS.csv') 
+
+win.flip()
+message = visual.TextStim(win, text = 'You will now be presented with the next questionnaire.\n\nPress spacebar to begin')
+message.setAutoDraw(True)
+win.flip()
+event.waitKeys(keyList='space')
+message.setText('')
+win.flip()
+
+instruct = "In this section, for each item, please rate the degree to which you feel the statement is characteristic or true for you."
+
+instructions = visual.TextStim(win, text = instruct, 
+                        height = .07, units = 'norm',
+                        pos = (0.0, 0.05))
+
+sp_text = visual.TextStim(win, text = "press the spacebar to continue",
+                          height = .07, units = 'norm',
+                          pos = (0.0, -0.7))
+instructions.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space') #keyList tells the program which key press makes the 
+win.flip()                        #program continue. if keylist is not present it will continue on any button press 
+
+message = visual.TextStim(win, text = "You will now be presented with a number of statements.",
+                           height = .08, units = 'norm',
+                           pos = (0.0, 0.0))
+
+message.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space')
+# takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
+nTrials = SAIS.shape[0] #returns the amount of rows in my data frame 
+
+#set up empty arrays of variables
+ids = []
+saisState = []
+saisStateNum = []
+saisResponses = []
+saisResponseTimes = []
+
+#start the trial loop
+for n in range(0, 1):
+     question = SAIS.loc[n, 'statement']
+     stateNum = SAIS.loc[n, 'stateNum']
+    
+     s1 = visual.TextStim(win, text= 'Not at all', height=.04, units='norm', pos =(-0.55, -0.45))
+     s2 = visual.TextStim(win, text= 'Slightly', height=.04, units='norm', pos = (-0.275, -0.45))
+     s3 = visual.TextStim(win, text= 'Moderately', height=.04, units='norm', pos = (0.0, -0.45))
+     s4 = visual.TextStim(win, text= 'Very', height=.04, units='norm', pos = (0.3, -0.45))
+     s5 = visual.TextStim(win, text= 'Extremly', height=.04, units='norm', pos = (0.6, -0.45))
+     
+     q_scale = visual.RatingScale(win, low = 1, high = 5, stretch = 2, scale = False, labels = False, singleClick = True)
+     
+     q = visual.TextStim(win, text=question, height=.10, units='norm', pos= (0.0, 0.20))
+     
+     while q_scale.noResponse: # show & update until a response has been made
+        q.draw()
+        s1.draw()
+        s2.draw()
+        s3.draw()
+        s4.draw()
+        s5.draw()
+        q_scale.draw()
+        win.flip()
+        
+     saisResponse = q_scale.getRating()
+     saisResponseTime = q_scale.getRT()
+     
+     ids.append(subject_id)
+     saisState.append(question)
+     saisStateNum.append(stateNum) 
+     saisResponses.append(saisResponse)
+     saisResponseTimes.append(saisResponseTime)
+     
+     win.flip() 
+     
+#create data frame with responses and associated characteristic\
+saisData = pd.DataFrame({'id' : ids,
+                     'stateNum' : saisStateNum,
+                     'statements' : saisState,
+                     'response' : saisResponses, 
+                     'responseTime': saisResponseTimes})
+    
+#Take the data frame and turn it into a csv file
+saisData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
+
+#end of SAIS survey, now launching SCS_SR
+
+file_name = "SCS_SR" + str(subject_id) + ".csv"
+SCS_SR = pd.read_csv('SCS_SR.csv') 
+
+win.flip()
+message = visual.TextStim(win, text = 'You will now be presented with the next questionnaire.\n\nPress spacebar to begin')
+message.setAutoDraw(True)
+win.flip()
+event.waitKeys(keyList='space')
+message.setText('')
+win.flip()
+
+instruct = "Please answer the following questions about yourself by indicating how much each individual statement is like you using the presented scale. \nPlease be as hoenst as you can throughout, and try to not let your responses to one question influence your response to other questions. \nThere are no right or wrong answes."
+
+instructions = visual.TextStim(win, text = instruct, 
+                        height = .07, units = 'norm',
+                        pos = (0.0, 0.05))
+
+sp_text = visual.TextStim(win, text = "press the spacebar to continue",
+                          height = .07, units = 'norm',
+                          pos = (0.0, -0.7))
+instructions.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space') #keyList tells the program which key press makes the 
+win.flip()                        #program continue. if keylist is not present it will continue on any button press 
+
+message = visual.TextStim(win, text = "You will now be presented with a number of questions.",
+                           height = .08, units = 'norm',
+                           pos = (0.0, 0.0))
+
+message.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space')
+# takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
+nTrials = SCS_SR.shape[0] #returns the amount of rows in my data frame 
+
+#set up empty arrays of variables
+ids = []
+scsSRQuestions= []
+scsSRQuestNum = []
+scsSRResponses = []
+scsSRResponseTimes = []
+
+#start the trial loop
+for n in range(0, 1):
+     question = SCS_SR.loc[n, 'question']
+     questNum = SCS_SR.loc[n, 'questNum']
+    
+     s1 = visual.TextStim(win, text= 'Not like me at all', height=.04, units='norm', pos =(-0.55, -0.45))
+     s2 = visual.TextStim(win, text= 'A little like me', height=.04, units='norm', pos = (-0.2, -0.45))
+     s3 = visual.TextStim(win, text= 'Somewhat like me', height=.04, units='norm', pos = (0.2, -0.45))
+     s4 = visual.TextStim(win, text= 'A lot like me', height=.04, units='norm', pos = (0.55, -0.45))
+     
+     q_scale = visual.RatingScale(win, low = 1, high = 4, stretch = 2, scale = False, labels = False, singleClick = True)
+     
+     q = visual.TextStim(win, text=question, height=.10, units='norm', pos= (0.0, 0.20))
+     
+     while q_scale.noResponse: # show & update until a response has been made
+        q.draw()
+        s1.draw()
+        s2.draw()
+        s3.draw()
+        s4.draw()
+        q_scale.draw()
+        win.flip()
+        
+     scsSRResponse = q_scale.getRating()
+     scsSRResponseTime = q_scale.getRT()
+     
+     ids.append(subject_id)
+     scsSRQuestions.append(question)
+     scsSRQuestNum.append(questNum) 
+     scsSRResponses.append(scsSRResponse)
+     scsSRResponseTimes.append(scsSRResponseTime)
+     
+     win.flip() 
+     
+#create data frame with responses and associated characteristic\
+scsSRData = pd.DataFrame({'id' : ids,
+                     'questNum' : scsSRQuestNum,
+                     'questions' : scsSRQuestions,
+                     'response' : scsSRResponses, 
+                     'responseTime': scsSRResponseTimes})
+    
+#Take the data frame and turn it into a csv file
+scsSRData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
+
+# End of SCS_SR, now launching SPS 
+
+file_name = "SPS" + str(subject_id) + ".csv"
+SPS = pd.read_csv('SPS.csv') 
+
+win.flip()
+message = visual.TextStim(win, text = 'You will now be presented with the next questionnaire.\n\nPress spacebar to begin')
+message.setAutoDraw(True)
+win.flip()
+event.waitKeys(keyList='space')
+message.setText('')
+win.flip()
+
+instruct = "In this section, please indicate the degree to which you feel the statement is characteristic or true for you."
+
+instructions = visual.TextStim(win, text = instruct, 
+                        height = .07, units = 'norm',
+                        pos = (0.0, 0.05))
+
+sp_text = visual.TextStim(win, text = "press the spacebar to continue",
+                          height = .07, units = 'norm',
+                          pos = (0.0, -0.7))
+instructions.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space') #keyList tells the program which key press makes the 
+win.flip()                        #program continue. if keylist is not present it will continue on any button press 
+
+message = visual.TextStim(win, text = "You will now be presented with a number of statements.",
+                           height = .08, units = 'norm',
+                           pos = (0.0, 0.0))
+
+message.draw()
+sp_text.draw()
+win.flip()
+event.waitKeys(keyList = 'space')
+# takes the message draws it, takes the sp_text draws it and then winflip makes it show on the screen
+nTrials = SPS.shape[0] #returns the amount of rows in my data frame 
+
+#set up empty arrays of variables
+ids = []
+spsQuestion = []
+spsQuestNum = []
+spsResponses = []
+spsResponseTimes = []
+
+#start the trial loop
+for n in range(0, 5):
+     question = SPS.loc[n, 'question']
+     questNum = SPS.loc[n, 'questNum']
+    
+     s1 = visual.TextStim(win, text= 'Not at all', height=.04, units='norm', pos =(-0.55, -0.45))
+     s2 = visual.TextStim(win, text= 'Slightly', height=.04, units='norm', pos = (-0.275, -0.45))
+     s3 = visual.TextStim(win, text= 'Moderately', height=.04, units='norm', pos = (0.0, -0.45))
+     s4 = visual.TextStim(win, text= 'Very', height=.04, units='norm', pos = (0.3, -0.45))
+     s5 = visual.TextStim(win, text= 'Extremly', height=.04, units='norm', pos = (0.6, -0.45))
+     
+     q_scale = visual.RatingScale(win, low = 1, high = 5, stretch = 2, scale = False, labels = False, singleClick = True)
+     
+     q = visual.TextStim(win, text=question, height=.10, units='norm', pos= (0.0, 0.20))
+     
+     while q_scale.noResponse: # show & update until a response has been made
+        q.draw()
+        s1.draw()
+        s2.draw()
+        s3.draw()
+        s4.draw()
+        s5.draw()
+        q_scale.draw()
+        win.flip()
+        
+     spsResponse = q_scale.getRating()
+     spsResponseTime = q_scale.getRT()
+     
+     ids.append(subject_id)
+     spsQuestion.append(question)
+     spsQuestNum.append(questNum) 
+     spsResponses.append(spsResponse)
+     spsResponseTimes.append(spsResponseTime)
+     
+     win.flip() 
+     
+#create data frame with responses and associated characteristic\
+spsData = pd.DataFrame({'id' : ids,
+                     'questNum' : spsQuestNum,
+                     'question' : spsQuestion,
+                     'response' : spsResponses, 
+                     'responseTime': spsResponseTimes})
+    
+#Take the data frame and turn it into a csv file
+spsData.to_csv(file_name, sep = ',', index = False, na_rep = 'na', header = True)
 
 win.close()
